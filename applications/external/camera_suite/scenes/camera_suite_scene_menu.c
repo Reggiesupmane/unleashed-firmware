@@ -1,8 +1,10 @@
 #include "../camera_suite.h"
 
 enum SubmenuIndex {
-    /** Camera. */
-    SubmenuIndexSceneCamera = 10,
+    /** Atkinson Dithering Algorithm. */
+    SubmenuIndexSceneStyle1 = 10,
+    /** Floyd-Steinberg Dithering Algorithm. */
+    SubmenuIndexSceneStyle2,
     /** Guide/how-to. */
     SubmenuIndexGuide,
     /** Settings menu. */
@@ -20,9 +22,16 @@ void camera_suite_scene_menu_on_enter(void* context) {
     submenu_add_item(
         app->submenu,
         "Open Camera",
-        SubmenuIndexSceneCamera,
+        SubmenuIndexSceneStyle1,
         camera_suite_scene_menu_submenu_callback,
         app);
+    // Staged view for the future.
+    // submenu_add_item(
+    //     app->submenu,
+    //     "Test",
+    //     SubmenuIndexSceneStyle2,
+    //     camera_suite_scene_menu_submenu_callback,
+    //     app);
     submenu_add_item(
         app->submenu, "Guide", SubmenuIndexGuide, camera_suite_scene_menu_submenu_callback, app);
     submenu_add_item(
@@ -47,10 +56,15 @@ bool camera_suite_scene_menu_on_event(void* context, SceneManagerEvent event) {
         view_dispatcher_stop(app->view_dispatcher);
         return true;
     } else if(event.type == SceneManagerEventTypeCustom) {
-        if(event.event == SubmenuIndexSceneCamera) {
+        if(event.event == SubmenuIndexSceneStyle1) {
             scene_manager_set_scene_state(
-                app->scene_manager, CameraSuiteSceneMenu, SubmenuIndexSceneCamera);
-            scene_manager_next_scene(app->scene_manager, CameraSuiteSceneCamera);
+                app->scene_manager, CameraSuiteSceneMenu, SubmenuIndexSceneStyle1);
+            scene_manager_next_scene(app->scene_manager, CameraSuiteSceneStyle_1);
+            return true;
+        } else if(event.event == SubmenuIndexSceneStyle2) {
+            scene_manager_set_scene_state(
+                app->scene_manager, CameraSuiteSceneMenu, SubmenuIndexSceneStyle2);
+            scene_manager_next_scene(app->scene_manager, CameraSuiteSceneStyle_2);
             return true;
         } else if(event.event == SubmenuIndexGuide) {
             scene_manager_set_scene_state(
